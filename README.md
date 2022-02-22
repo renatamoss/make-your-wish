@@ -3,7 +3,7 @@
 This is a project developed in Vue JS, using Rest Json-Server APIs, hosted on the HEROKU platform. Consuming data with Vuex and Axios authentication. Crud with create, read, update and delete request functionality. SASS-style web application.
 
 ## Project Preview: 
-**https://app-make-your-wish.vercel.app/**
+**https://make-your-wish.vercel.app/**
 
 [![img_checklist](https://github.com/renatamoss/app_make_your_wish/blob/main/make_your_wish.gif?raw=true)](https://app-make-your-wish.vercel.app/)
 

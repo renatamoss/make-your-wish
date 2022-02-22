@@ -13,7 +13,7 @@
               placeholder="Digite o nome completo"
               @click="clearMessageError"
             />
-            <div class="message__error--fields" v-show="messageErrorName">
+            <div class="message__error--fields" v-show="message_error_name">
               Campo inválido, digite o nome completo.
             </div>
 
@@ -24,7 +24,7 @@
               placeholder="Digite o telefone com DDD"
               @click="clearMessageError"
             />
-            <div class="message__error--fields" v-show="messageErrorPhone">
+            <div class="message__error--fields" v-show="message_error_phone">
               Campo inválido, digite o telefone com DDD.
             </div>
 
@@ -35,7 +35,7 @@
               placeholder="Digite a Rua e Número"
               @click="clearMessageError"
             />
-            <div class="message__error" v-show="messageErrorAdress">
+            <div class="message__error--fields" v-show="message_error_adress">
               Campo inválido, digite a Rua e Número.
             </div>
 
@@ -46,7 +46,7 @@
               placeholder="Digite o Bairro"
               @click="clearMessageError"
             />
-            <div class="message__error--fields" v-show="messageErrorDistrict">
+            <div class="message__error--fields" v-show="message_error_district">
               Campo inválido, digite o Bairro.
             </div>
           </div>
@@ -138,9 +138,9 @@
       </form>
     </div>
 
-    <div v-else>
+    <div v-else v-show="message_server_error">
       <ErrorServidorContent
-        :errorServidor="'Sistema indisponível no momento, tente novamente mais tarde.'"
+        message_server_error="Sistema indisponível no momento, tente novamente mais tarde."
       />
     </div>
   </AppContent>
@@ -195,10 +195,12 @@ export default {
       messageMakeWish: null,
 
       //Validade fields
-      messageErrorName: null,
-      messageErrorPhone: null,
-      messageErrorAdress: null,
-      messageErrorDistrict: null,
+      message_error_name: null,
+      message_error_phone: null,
+      message_error_adress: null,
+      message_error_district: null,
+
+      message_server_error: null,
     };
   },
   methods: {
@@ -222,7 +224,7 @@ export default {
       ) {
         return true;
       } else {
-        this.messageErrorName = true;
+        this.message_error_name = true;
       }
     },
     validatePhone() {
@@ -233,7 +235,7 @@ export default {
       ) {
         return true;
       } else {
-        this.messageErrorPhone = true;
+        this.message_error_phone = true;
       }
     },
 
@@ -245,7 +247,7 @@ export default {
       ) {
         return true;
       } else {
-        this.messageErrorAdress = true;
+        this.message_error_adress = true;
       }
     },
     validateDistrict() {
@@ -256,15 +258,14 @@ export default {
       ) {
         return true;
       } else {
-        this.messageErrorDistrict = true;
+        this.message_error_district = true;
       }
     },
     clearMessageError() {
-      this.messageErrorName = false;
-      this.messageErrorPhone = false;
-      this.messageErrorAdress = false;
-      this.messageErrorDistrict = false;
-      this.MessageErrorRequest = false;
+      this.message_error_name = false;
+      this.message_error_phone = false;
+      this.message_error_adress = false;
+      this.message_error_district = false;
     },
 
     //método chamado no mounted()
@@ -289,6 +290,7 @@ export default {
         this.opcionaisdata = data.opcionais;
       } catch (err) {
         this.produtos = false;
+        this.message_server_error = true;
         console.log(`Erro na resposta do servidor` + err);
       }
     },

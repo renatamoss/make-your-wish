@@ -11,7 +11,7 @@
           v-model="usuario.nome"
           @click="clearErrorNewUSer"
         />
-        <div class="message__error" v-show="messageErrorName">
+        <div class="message__error" v-show="message_error_name">
           Digite seu nome completo, de 6 a 30 caracteres.
         </div>
       </div>
@@ -24,7 +24,7 @@
           v-model="usuario.email"
           @click="clearErrorNewUSer"
         />
-        <div class="message__error" v-show="messageErrorEmail">
+        <div class="message__error" v-show="message_error_email">
           Digite um email válido.
         </div>
       </div>
@@ -37,19 +37,22 @@
           v-model="usuario.senha"
           @click="clearErrorNewUSer"
         />
-        <div class="message__error" v-show="messageErrorPassword">
+        <div class="message__error" v-show="message_error_password">
           Digite uma senha válida, de 8 a 12 caracteres, pelo menos uma letra e
           um número.
         </div>
       </div>
 
-      <div class="message__error--request" v-show="messageErrorRequest">
-        Servidor indisponível no momento, tente novamente mais tarde.
+      <div>
+        <ErrorServidorContent
+          message_server_error="Sistema indisponível no momento, tente novamente mais tarde."
+           v-show="message_server_error"
+        />
       </div>
 
       <Button name="Cadastrar" symbol="bi bi-person-plus" />
 
-      <Message :messageBox="messageNewUser" v-show="messageNewUser" />
+      <Message :messageBox="message_new_user" v-show="message_new_user" />
 
       <router-link to="/">
         <p>Se você já tem cadastro, faça o login aqui!</p>
@@ -62,12 +65,14 @@
 import AppContent from "@/components/templates/AppContent";
 import Button from "@/components/shared/Button";
 import Message from "@/components/shared/Message";
+import ErrorServidorContent from "@/components/shared/ErrorServidorContent.vue";
 
 export default {
   components: {
     AppContent,
     Button,
     Message,
+    ErrorServidorContent,
   },
   data() {
     return {
@@ -76,12 +81,14 @@ export default {
         email: "",
         senha: "",
       },
-      mensagemErro: null,
-      messageNewUser: null,
-      messageErrorName: null,
-      messageErrorPassword: null,
-      messageErrorEmail: null,
-      messageErrorRequest: null,
+
+      message_new_user: null,
+      message_error_name: null,
+      message_error_password: null,
+      message_error_email: null,
+
+      message_server_error: null,
+
     };
   },
   methods: {
@@ -92,9 +99,7 @@ export default {
         this.validatePassword()
       ) {
         this.registerNewUSer();
-      } else {
-        return false;
-      }
+      } 
     },
 
     //ValidadeNewUser
@@ -102,7 +107,7 @@ export default {
       if (this.usuario.nome.length >= 6 && this.usuario.nome.length <= 30) {
         return true;
       } else {
-        this.messageErrorName = true;
+        this.message_error_name = true;
       }
     },
     validateEmail() {
@@ -113,20 +118,24 @@ export default {
       ) {
         return true;
       } else {
-        this.messageErrorEmail = true;
+        this.message_error_email = true;
       }
     },
     validatePassword() {
-      if (/^(?=.*[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ])(?=.*[0-9]).{8,12}$/.test(this.usuario.senha)) {
+      if (
+        /^(?=.*[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ])(?=.*[0-9]).{8,12}$/.test(
+          this.usuario.senha
+        )
+      ) {
         return true;
       } else {
-        this.messageErrorPassword = true;
+        this.message_error_password = true;
       }
     },
     clearErrorNewUSer() {
-      this.messageErrorName = false;
-      this.messageErrorEmail = false;
-      this.messageErrorPassword = false;
+      this.message_error_name = false;
+      this.message_error_email = false;
+      this.message_error_password = false;
     },
 
     //registerNewUSer
@@ -134,10 +143,10 @@ export default {
       this.$http
         .post("auth/register", this.usuario)
         .then(() => {
-          this.messageNewUser = `Cadastro realizado com sucesso.`;
+          this.message_new_user = `Cadastro realizado com sucesso.`;
           setTimeout(() => this.$router.push({ name: "Login" }), 3000);
         })
-        .catch(() => (this.messageErrorRequest = true));
+        .catch(() => (this.message_server_error = true));
       this.usuario.nome = "";
       this.usuario.email = "";
       this.usuario.senha = "";
@@ -148,6 +157,9 @@ export default {
     },
   },
   mounted() {
+    if (this.$store.getters["userLogged"]) {
+      this.$router.push({ name: "Cadastrar Pedidos" });
+    }
     this.focusInput();
   },
 };

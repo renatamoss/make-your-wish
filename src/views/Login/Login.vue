@@ -11,7 +11,7 @@
           v-model="usuario.email"
           @click="clearErrorLogin"
         />
-        <div class="message__error--user" v-show="messageErrorEmail">
+        <div class="message__error--user" v-show="message_error_email">
           Email inválido, utilize o email cadastrado ou vá para 'Cadastrar'.
         </div>
       </div>
@@ -24,16 +24,18 @@
           v-model="usuario.senha"
           @click="clearErrorLogin"
         />
-        <div class="message__error--user" v-show="messageErrorPassword">
+        <div class="message__error--user" v-show="message_error_password">
           Senha não informada.
         </div>
       </div>
-      <div class="message__error--request" v-if="messageErrorRequest">
+      <div class="message__error--request" v-show="message_error_request">
         Você digitou um login ou senha inválido(s). Tente novamente.
       </div>
-      <div class="message__error--offline" v-if="messageErrorOffLine">
-        Servidor indisponível no momento, tente novamente mais tarde.
-      </div>
+
+      <ErrorServidorContent
+        message_server_error="Sistema indisponível no momento, tente novamente mais tarde."
+        v-show="message_server_error"
+      />
 
       <Button name="Login" symbol="bi bi-box-arrow-in-right" />
 
@@ -47,11 +49,13 @@
 <script>
 import AppContent from "@/components/templates/AppContent";
 import Button from "@/components/shared/Button";
+import ErrorServidorContent from "@/components/shared/ErrorServidorContent.vue";
 
 export default {
   components: {
     AppContent,
     Button,
+    ErrorServidorContent,
   },
 
   data() {
@@ -60,10 +64,10 @@ export default {
         email: "",
         senha: "",
       },
-      messageErrorPassword: null,
-      messageErrorEmail: null,
-      messageErrorRequest: null,
-      messageErrorOffLine: null,
+      message_error_password: null,
+      message_error_email: null,
+      message_error_request: null,
+      message_server_error: null,
     };
   },
   methods: {
@@ -82,21 +86,21 @@ export default {
       ) {
         return true;
       } else {
-        this.messageErrorEmail = true;
+        this.message_error_email = true;
       }
     },
     validatePassword() {
       if (this.usuario.senha !== "") {
         return true;
       } else {
-        this.messageErrorPassword = true;
+        this.message_error_password = true;
       }
     },
     clearErrorLogin() {
-      this.messageErrorName = false;
-      this.messageErrorEmail = false;
-      this.messageErrorPassword = false;
-      this.messageErrorOffLine = false;
+      this.message_error_name = false;
+      this.message_error_email = false;
+      this.message_error_password = false;
+      this.message_error_request = false;
     },
 
     //commit: chama uma mutation do Vuex
@@ -110,12 +114,12 @@ export default {
         })
         .catch((error) => {
           if (error.request.status === 401) {
-            this.messageErrorRequest = true;
+            this.message_error_request = true;
             this.usuario.email = "";
             this.usuario.senha = "";
             this.focusInput();
           } else {
-            this.messageErrorOffLine = true;
+            this.message_server_error = true;
             this.usuario.email = "";
             this.usuario.senha = "";
             this.focusInput();
@@ -127,6 +131,9 @@ export default {
     },
   },
   mounted() {
+    if (this.$store.getters["userLogged"]) {
+      this.$router.push({ name: "Cadastrar Pedidos" });
+    }
     this.focusInput();
   },
 };

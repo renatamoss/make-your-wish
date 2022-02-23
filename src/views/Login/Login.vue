@@ -28,6 +28,7 @@
           Senha não informada.
         </div>
       </div>
+      
       <div class="message__error--request" v-show="message_error_request">
         Você digitou um login ou senha inválido(s). Tente novamente.
       </div>
@@ -103,14 +104,14 @@ export default {
       this.message_error_request = false;
     },
 
-    //commit: chama uma mutation do Vuex
-    //dispacth: chama uma action
     doLogin() {
+
+      //dispacth: chama uma action no store: doLoginStore
       this.$store
         .dispatch("doLoginStore", this.usuario)
+
         .then(() => {
           this.$router.push({ name: "Cadastrar Pedidos" });
-          this.messageError = "";
         })
         .catch((error) => {
           if (error.request.status === 401) {

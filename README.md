@@ -5,7 +5,7 @@ This is a project developed in Vue JS, using Rest Json-Server APIs, hosted on th
 ## Project Preview: 
 **https://make-your-wish.vercel.app/**
 
-[![img_checklist](https://github.com/renatamoss/app_make_your_wish/blob/main/make_your_wish.gif?raw=true)](https://app-make-your-wish.vercel.app/)
+[![img_make-your-wish](https://github.com/renatamoss/make_your-wish/blob/main/public/make_your_wish.gif?raw=true)](https://make-your-wish.vercel.app/)
 
 ## API Implemented end-points:
 
@@ -16,7 +16,6 @@ This is a project developed in Vue JS, using Rest Json-Server APIs, hosted on th
 * JSON-Server;
 * NPM;
 * Vue CLI;
-* Vue.js;
 * Vue Router;
 * Vuex;
 * Axios;

@@ -191,7 +191,6 @@ export default {
       opcionais: [],
       tipoBebidas: [],
       status: "Solicitado",
-
       messageMakeWish: null,
 
       //Validade fields
@@ -199,7 +198,6 @@ export default {
       message_error_phone: null,
       message_error_adress: null,
       message_error_district: null,
-
       message_server_error: null,
     };
   },

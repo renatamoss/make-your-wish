@@ -11,7 +11,7 @@
       v-show="message_update_wish"
     />
 
-    <div class="dashboard">
+    <div class="dashboard" v-if="pedidos" v-show="pedidos">
       <div class="dashboard___box" v-for="pedido in pedidos" :key="pedido.id">
         <div class="box__head">
           <p>PEDIDO Nº: 000{{ pedido.id }} - Data: {{ date }}</p>
@@ -78,7 +78,7 @@
       </div>
     </div>
 
-    <div v-show="message_server_error">
+    <div v-else v-show="message_server_error">
       <ErrorServidorContent
         message_server_error="Sistema indisponível no momento, tente novamente mais tarde."
       />
@@ -103,7 +103,7 @@ export default {
 
   data() {
     return {
-      pedidos: null,
+      pedidos: true,
       pedido_id: null,
       status: [],
       date: null,
@@ -113,8 +113,8 @@ export default {
     };
   },
   methods: {
+    //Resposta do banco com inserção do dados:
     async getPedidos() {
-      //Resposta do banco com inserção do dados:
       try {
         const req = await fetch(
           "https://api-data-make-your-wish.herokuapp.com/pedidos"
@@ -126,14 +126,15 @@ export default {
           this.msg_pedido = "Não há pedidos em aberto no momento.";
         }
 
-        // Resgata os status de pedidos:
-        this.getStatus();
         this.includeDate();
+        this.getStatus();
       } catch (err) {
+        this.pedidos = false;
         this.message_server_error = true;
         console.log(`Deu erro no acesso ao servidor` + err);
       }
     },
+
     // Status de pedidos:
     async getStatus() {
       try {
@@ -143,10 +144,12 @@ export default {
         const data = await req.json();
         this.status = data;
       } catch (err) {
-        console.log(`Erro no acesso ao servidor`);
-        console.log(err);
+        this.pedidos = true;
+        this.message_server_error = true;
+        console.log(`Deu erro no acesso ao servidor: STATUS DO PEDIDO ` + err);
       }
     },
+
     //Deletar pedido:
     async deletePedido(id) {
       try {
@@ -166,7 +169,9 @@ export default {
         // Resgata dados atualizados no banco de dados:
         this.getPedidos();
       } catch (err) {
-        console.log(`Deu erro no acesso ao servidor` + err);
+        this.pedidos = true;
+        this.message_server_error = true;
+        console.log(`Deu erro no acesso ao servidor: DELETAR PEDIDO ` + err);
       }
     },
 
@@ -183,24 +188,29 @@ export default {
             body: dataJson,
           }
         );
-
         //mensagem pedido atualizado
         const res = await req.json();
         this.message_update_wish = `Pedido atualizado Nº ${res.id} com sucesso para ${res.status}.`;
         setTimeout(() => (this.message_update_wish = ""), 3000);
       } catch (err) {
-        console.log(`Deu erro no acesso ao servidor` + err);
+        this.pedidos = true;
+        this.message_server_error = true;
+        console.log(`Deu erro no acesso ao servidor: ATUALIZA PEDIDO ` + err);
       }
     },
-  },
-  computed: {
     includeDate() {
-      const dateContent = new Date();
-      const day = String(dateContent.getDate()).padStart(2, "0");
-      const month = String(dateContent.getMonth() + 1).padStart(2, "0");
-      const year = dateContent.getFullYear();
-      const dateToday = day + "/" + month + "/" + year;
-      this.date = dateToday;
+      try {
+        const dateContent = new Date();
+        const day = String(dateContent.getDate()).padStart(2, "0");
+        const month = String(dateContent.getMonth() + 1).padStart(2, "0");
+        const year = dateContent.getFullYear();
+        const dateToday = day + "/" + month + "/" + year;
+        this.date = dateToday;
+      } catch (err) {
+        this.pedidos = true;
+        this.message_server_error = true;
+        console.log(`Deu erro no acesso ao servidor: DATA ` + err);
+      }
     },
   },
   mounted() {

@@ -126,7 +126,14 @@ export default {
           this.msg_pedido = "Não há pedidos em aberto no momento.";
         }
 
-        this.includeDate();
+        //Date
+        const dateContent = new Date();
+        const day = String(dateContent.getDate()).padStart(2, "0");
+        const month = String(dateContent.getMonth() + 1).padStart(2, "0");
+        const year = dateContent.getFullYear();
+        const dateToday = day + "/" + month + "/" + year;
+        this.date = dateToday;
+
         this.getStatus();
       } catch (err) {
         this.pedidos = false;
@@ -144,7 +151,6 @@ export default {
         const data = await req.json();
         this.status = data;
       } catch (err) {
-        this.pedidos = true;
         this.message_server_error = true;
         console.log(`Deu erro no acesso ao servidor: STATUS DO PEDIDO ` + err);
       }
@@ -169,7 +175,6 @@ export default {
         // Resgata dados atualizados no banco de dados:
         this.getPedidos();
       } catch (err) {
-        this.pedidos = true;
         this.message_server_error = true;
         console.log(`Deu erro no acesso ao servidor: DELETAR PEDIDO ` + err);
       }
@@ -193,23 +198,8 @@ export default {
         this.message_update_wish = `Pedido atualizado Nº ${res.id} com sucesso para ${res.status}.`;
         setTimeout(() => (this.message_update_wish = ""), 3000);
       } catch (err) {
-        this.pedidos = true;
         this.message_server_error = true;
         console.log(`Deu erro no acesso ao servidor: ATUALIZA PEDIDO ` + err);
-      }
-    },
-    includeDate() {
-      try {
-        const dateContent = new Date();
-        const day = String(dateContent.getDate()).padStart(2, "0");
-        const month = String(dateContent.getMonth() + 1).padStart(2, "0");
-        const year = dateContent.getFullYear();
-        const dateToday = day + "/" + month + "/" + year;
-        this.date = dateToday;
-      } catch (err) {
-        this.pedidos = true;
-        this.message_server_error = true;
-        console.log(`Deu erro no acesso ao servidor: DATA ` + err);
       }
     },
   },

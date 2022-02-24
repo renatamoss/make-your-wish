@@ -14,7 +14,7 @@
     <div class="dashboard">
       <div class="dashboard___box" v-for="pedido in pedidos" :key="pedido.id">
         <div class="box__head">
-          <p>PEDIDO Nº: 000{{ pedido.id }}</p>
+          <p>PEDIDO Nº: 000{{ pedido.id }} - Data: {{ date }}</p>
 
           <div class="box__head-buttons">
             <select
@@ -106,6 +106,7 @@ export default {
       pedidos: null,
       pedido_id: null,
       status: [],
+      date: null,
       message_remove_wish: null,
       message_update_wish: null,
       message_server_error: null,
@@ -127,6 +128,7 @@ export default {
 
         // Resgata os status de pedidos:
         this.getStatus();
+        this.includeDate();
       } catch (err) {
         this.message_server_error = true;
         console.log(`Deu erro no acesso ao servidor` + err);
@@ -189,6 +191,16 @@ export default {
       } catch (err) {
         console.log(`Deu erro no acesso ao servidor` + err);
       }
+    },
+  },
+  computed: {
+    includeDate() {
+      const dateContent = new Date();
+      const day = String(dateContent.getDate()).padStart(2, "0");
+      const month = String(dateContent.getMonth() + 1).padStart(2, "0");
+      const year = dateContent.getFullYear();
+      const dateToday = day + "/" + month + "/" + year;
+      this.date = dateToday;
     },
   },
   mounted() {
@@ -279,7 +291,7 @@ export default {
         display: block;
 
         p {
-          width: 7rem;
+          width: 14.5rem;
         }
 
         &-buttons {

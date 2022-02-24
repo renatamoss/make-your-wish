@@ -14,7 +14,7 @@
     <div class="dashboard">
       <div class="dashboard___box" v-for="pedido in pedidos" :key="pedido.id">
         <div class="box__head">
-          <p>PEDIDO Nº: 000{{ pedido.id }} - Data: {{ date }}hs</p>
+          <p>PEDIDO Nº: 000{{ pedido.id }}</p>
 
           <div class="box__head-buttons">
             <select
@@ -108,8 +108,6 @@ export default {
       status: [],
       message_remove_wish: null,
       message_update_wish: null,
-      date: new Date().toLocaleString(),
-
       message_server_error: null,
     };
   },
@@ -281,7 +279,7 @@ export default {
         display: block;
 
         p {
-          width: 19rem;
+          width: 7rem;
         }
 
         &-buttons {

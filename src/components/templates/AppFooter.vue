@@ -1,9 +1,15 @@
 <template>
   <div class="footer">
-    <p>Make Your Wish &copy; 2022</p>
+    <p>{{ DEFAULT_TITLE }} &copy; 2022 | built with &#10084;</p>
   </div>
 </template>
 
+
+<script setup>
+import { ref } from "vue";
+
+const DEFAULT_TITLE = ref("App Make Your Wish");
+</script>
 
 <style lang="scss" scoped>
 .footer {

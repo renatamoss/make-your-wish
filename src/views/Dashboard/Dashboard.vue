@@ -1,11 +1,11 @@
 <template>
   <AppContent>
-    <Message
+    <MessageBox
       v-if="pedidos"
       :messageBox="message_remove_wish"
       v-show="message_remove_wish"
     />
-    <Message
+    <MessageBox
       v-if="pedidos"
       :messageBox="message_update_wish"
       v-show="message_update_wish"
@@ -89,14 +89,14 @@
 
 <script>
 import AppContent from "@/components/templates/AppContent";
-import Message from "@/components/shared/Message";
+import MessageBox from "@/components/shared/MessageBox";
 import Button from "@/components/shared/Button";
 import ErrorServidorContent from "@/components/shared/ErrorServidorContent.vue";
 
 export default {
   components: {
     AppContent,
-    Message,
+    MessageBox,
     Button,
     ErrorServidorContent,
   },

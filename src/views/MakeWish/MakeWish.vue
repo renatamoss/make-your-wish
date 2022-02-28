@@ -1,6 +1,6 @@
 <template>
   <AppContent>
-    <Message :messageBox="messageMakeWish" v-show="messageMakeWish" />
+    <MessageBox :messageBox="messageMakeWish" v-show="messageMakeWish" />
 
     <div v-if="produtos" v-show="produtos">
       <form class="make-wish" method="POST" @submit.prevent="onSubmitCreatWish">
@@ -148,7 +148,7 @@
 
 <script>
 import AppContent from "@/components/templates/AppContent";
-import Message from "@/components/shared/Message";
+import MessageBox from "@/components/shared/MessageBox";
 import FormFieldText from "@/components/shared/Form/FormFieldText";
 import FormFieldOption from "@/components/shared/Form/FormFieldOption";
 import FormFieldCheckbox from "@/components/shared/Form/FormFieldCheckbox";
@@ -158,7 +158,7 @@ import ErrorServidorContent from "@/components/shared/ErrorServidorContent.vue";
 export default {
   components: {
     AppContent,
-    Message,
+    MessageBox,
     FormFieldText,
     FormFieldOption,
     FormFieldCheckbox,

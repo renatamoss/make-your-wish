@@ -52,7 +52,7 @@
 
       <Button name="Cadastrar" symbol="bi bi-person-plus" />
 
-      <Message :messageBox="message_new_user" v-show="message_new_user" />
+      <MessageBox :messageBox="message_new_user" v-show="message_new_user" />
 
       <router-link to="/">
         <p>Se você já tem cadastro, faça o login aqui!</p>
@@ -64,14 +64,14 @@
 <script>
 import AppContent from "@/components/templates/AppContent";
 import Button from "@/components/shared/Button";
-import Message from "@/components/shared/Message";
+import MessageBox from "@/components/shared/MessageBox";
 import ErrorServidorContent from "@/components/shared/ErrorServidorContent.vue";
 
 export default {
   components: {
     AppContent,
     Button,
-    Message,
+    MessageBox,
     ErrorServidorContent,
   },
   data() {

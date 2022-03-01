@@ -5,13 +5,20 @@
       :messageBox="message_remove_wish"
       v-show="message_remove_wish"
     />
+
     <MessageBox
       v-if="pedidos"
       :messageBox="message_update_wish"
       v-show="message_update_wish"
     />
 
-    <div class="dashboard" v-if="pedidos" v-show="pedidos">
+    <MessageBox
+      v-if="pedidos"
+      :messageBox="message_not_wish"
+      v-show="message_not_wish"
+    />
+
+    <div class="dashboard">
       <div class="dashboard___box" v-for="pedido in pedidos" :key="pedido.id">
         <div class="box__head">
           <p>PEDIDO Nº: 000{{ pedido.id }} - Data: {{ date }}</p>
@@ -78,7 +85,7 @@
       </div>
     </div>
 
-    <div v-else v-show="message_server_error">
+    <div v-show="message_server_error">
       <ErrorServidorContent
         message_server_error="Sistema indisponível no momento, tente novamente mais tarde."
       />
@@ -103,12 +110,13 @@ export default {
 
   data() {
     return {
-      pedidos: true,
+      pedidos: null,
       pedido_id: null,
       status: [],
       date: null,
       message_remove_wish: null,
       message_update_wish: null,
+      message_not_wish: null,
       message_server_error: null,
     };
   },
@@ -123,7 +131,7 @@ export default {
         this.pedidos = data;
 
         if (data == false) {
-          this.msg_pedido = "Não há pedidos em aberto no momento.";
+          this.message_not_wish = "Não há pedidos em aberto no momento.";
         }
 
         //Date
@@ -136,7 +144,6 @@ export default {
 
         this.getStatus();
       } catch (err) {
-        this.pedidos = false;
         this.message_server_error = true;
         console.log(`Deu erro no acesso ao servidor` + err);
       }
